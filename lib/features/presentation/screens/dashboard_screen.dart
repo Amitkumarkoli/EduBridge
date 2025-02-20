@@ -40,91 +40,93 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: IndexedStack(
         index: navigationProvider.currentIndex,
         children: [
-          Column(
-            children: [
-              Container(
-                margin: EdgeInsets.all(16),
-                padding: EdgeInsets.all(16),
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      child: Text(
-                        'Attendance Viewport',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        child: Text(
+                          'Attendance Viewport',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Icon(Icons.calendar_month, color: Colors.black),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            color: Colors.grey[300],
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Icon(Icons.calendar_month, color: Colors.black),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              color: Colors.grey[300],
+                            ),
+                            child:
+                                Icon(Icons.person, color: Colors.black, size: 60),
                           ),
-                          child:
-                              Icon(Icons.person, color: Colors.black, size: 60),
-                        ),
-                        SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 34),
-                            Container(
-                              width: 180,
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Field 1',
-                                  border: OutlineInputBorder(),
+                          SizedBox(width: 16),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 34),
+                              Container(
+                                width: 180,
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    hintText: 'Field 1',
+                                    border: OutlineInputBorder(),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 16),
-                            Container(
-                              width: 180,
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Field 2',
-                                  border: OutlineInputBorder(),
+                              SizedBox(height: 16),
+                              Container(
+                                width: 180,
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    hintText: 'Field 2',
+                                    border: OutlineInputBorder(),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: GridView.count(
+                GridView.count(
                   padding: EdgeInsets.all(16),
                   crossAxisCount: 2,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.push(
@@ -172,8 +174,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           QueryScreen(),
           NotificationScreen(),
