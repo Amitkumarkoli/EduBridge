@@ -155,7 +155,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ResultsScreen())),
+                              builder: (context) => ResultScreen())),
                       child: _buildDashboardBox(Icons.assessment, 'Results'),
                     ),
                     GestureDetector(
