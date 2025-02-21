@@ -74,9 +74,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: 20),
                 Center(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Edit Profile'),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Edit Profile'),
+                    ),
                   ),
                 ),
               ],
