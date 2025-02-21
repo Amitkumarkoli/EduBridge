@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class PrizesScreen extends StatelessWidget {
+  const PrizesScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Prizes'),
+        title: const Text('Prizes'),
       ),
-      body: Center(
-        child: Text('Prizes Page'),
+      body: const Center(
+        child: Text('Prizes Screen'),
       ),
     );
   }

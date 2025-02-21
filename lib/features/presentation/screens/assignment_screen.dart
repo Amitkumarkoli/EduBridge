@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../core/providers/language_provider.dart';
 import 'assignment_detail_screen.dart';
 
 class AssignmentScreen extends StatefulWidget {
@@ -9,8 +11,8 @@ class AssignmentScreen extends StatefulWidget {
 }
 
 class _AssignmentScreenState extends State<AssignmentScreen> {
-  String selectedSubject = 'All';
-  String selectedSort = 'Due Date';
+  String selectedSubject = 'all';
+  String selectedSort = 'due_date';
   String searchQuery = '';
 
   final List<Map<String, String>> assignments = [
@@ -43,23 +45,23 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProvider>(context);
+
     List<Map<String, String>> filteredAssignments =
         assignments.where((assignment) {
-      bool matchesSubject =
-          selectedSubject == 'All' || assignment['subject'] == selectedSubject;
-
+      bool matchesSubject = selectedSubject == 'all' ||
+          assignment['subject']!.toLowerCase() == selectedSubject;
       bool matchesSearch = searchQuery.isEmpty ||
           assignment['title']!
               .toLowerCase()
               .contains(searchQuery.toLowerCase());
-
       return matchesSubject && matchesSearch;
     }).toList();
 
     filteredAssignments.sort((a, b) {
-      if (selectedSort == 'Due Date') {
+      if (selectedSort == 'due_date') {
         return a['dueDate']!.compareTo(b['dueDate']!);
-      } else if (selectedSort == 'Status') {
+      } else if (selectedSort == 'status') {
         return a['status']!.compareTo(b['status']!);
       }
       return 0;
@@ -67,28 +69,38 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Assignments'),
+        title: Text(languageProvider.texts['assignments'] ?? 'Assignments'),
         backgroundColor: Colors.white,
         elevation: 1,
       ),
       body: Column(
         children: [
-          _buildSearchBar(),
-          _buildFilters(),
+          _buildSearchBar(languageProvider),
+          _buildFilters(languageProvider),
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('Subject')),
-                  DataColumn(label: Text('Title')),
-                  DataColumn(label: Text('Due Date')),
-                  DataColumn(label: Text('Status')),
-                  DataColumn(label: Text('Action')),
+                columns: [
+                  DataColumn(
+                      label:
+                          Text(languageProvider.texts['subject'] ?? 'Subject')),
+                  DataColumn(
+                      label: Text(languageProvider.texts['title'] ?? 'Title')),
+                  DataColumn(
+                      label: Text(
+                          languageProvider.texts['due_date'] ?? 'Due Date')),
+                  DataColumn(
+                      label:
+                          Text(languageProvider.texts['status'] ?? 'Status')),
+                  DataColumn(
+                      label:
+                          Text(languageProvider.texts['action'] ?? 'Action')),
                 ],
-                rows: filteredAssignments.map((assignment) {
-                  return _buildDataRow(assignment, context);
-                }).toList(),
+                rows: filteredAssignments
+                    .map((assignment) =>
+                        _buildDataRow(assignment, context, languageProvider))
+                    .toList(),
               ),
             ),
           ),
@@ -97,7 +109,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
     );
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildSearchBar(LanguageProvider languageProvider) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
@@ -106,16 +118,17 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
             searchQuery = value;
           });
         },
-        decoration: const InputDecoration(
-          hintText: 'Search Assignments by name',
-          prefixIcon: Icon(Icons.search),
-          border: OutlineInputBorder(),
+        decoration: InputDecoration(
+          hintText: languageProvider.texts['search_assignments'] ??
+              'Search Assignments by name',
+          prefixIcon: const Icon(Icons.search),
+          border: const OutlineInputBorder(),
         ),
       ),
     );
   }
 
-  Widget _buildFilters() {
+  Widget _buildFilters(LanguageProvider languageProvider) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
@@ -127,10 +140,21 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                 selectedSubject = value!;
               });
             },
-            items: ['All', 'Mathematics', 'Science']
-                .map((subject) =>
-                    DropdownMenuItem(value: subject, child: Text(subject)))
-                .toList(),
+            items: [
+              DropdownMenuItem(
+                value: 'all',
+                child: Text(languageProvider.texts['all'] ?? 'All'),
+              ),
+              DropdownMenuItem(
+                value: 'mathematics',
+                child: Text(
+                    languageProvider.texts['mathematics'] ?? 'Mathematics'),
+              ),
+              DropdownMenuItem(
+                value: 'science',
+                child: Text(languageProvider.texts['science'] ?? 'Science'),
+              ),
+            ],
           ),
           const SizedBox(width: 10),
           DropdownButton<String>(
@@ -140,34 +164,45 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                 selectedSort = value!;
               });
             },
-            items: ['Due Date', 'Status']
-                .map((sort) => DropdownMenuItem(value: sort, child: Text(sort)))
-                .toList(),
+            items: [
+              DropdownMenuItem(
+                value: 'due_date',
+                child: Text(languageProvider.texts['due_date'] ?? 'Due Date'),
+              ),
+              DropdownMenuItem(
+                value: 'status',
+                child: Text(languageProvider.texts['status'] ?? 'Status'),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  DataRow _buildDataRow(Map<String, String> assignment, BuildContext context) {
+  DataRow _buildDataRow(Map<String, String> assignment, BuildContext context,
+      LanguageProvider languageProvider) {
     return DataRow(cells: [
       DataCell(Text(assignment['subject']!)),
       DataCell(Text(assignment['title']!)),
       DataCell(Text(assignment['dueDate']!)),
-      DataCell(Text(assignment['status'] == 'Submitted'
-          ? '✅ Submitted'
-          : '❌ Not Submitted')),
+      DataCell(Text(
+        assignment['status'] == 'Submitted'
+            ? (languageProvider.texts['submitted'] ?? '✅ Submitted')
+            : (languageProvider.texts['not_submitted'] ?? '❌ Not Submitted'),
+      )),
       DataCell(
         TextButton(
           onPressed: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      AssignmentDetailScreen(assignment: assignment),
-                ));
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    AssignmentDetailScreen(assignment: assignment),
+              ),
+            );
           },
-          child: const Text('View Details'),
+          child: Text(languageProvider.texts['view_details'] ?? 'View Details'),
         ),
       ),
     ]);

@@ -1,4 +1,3 @@
-import 'package:edubridge/features/presentation/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,48 +19,43 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Login',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 20),
-                TextField(
+                const SizedBox(height: 20),
+                const TextField(
                   decoration: InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 20),
-                TextField(
+                const SizedBox(height: 20),
+                const TextField(
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 SizedBox(
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                       Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DashboardScreen()),
-                      );
+                      Navigator.pushNamed(context, '/dashboard');
                     },
-                    child: Text('Login'),
+                    child: const Text('Login'),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextButton(
-                  onPressed: () {
-                    // Add forgot password functionality here
-                  },
-                  child: Text('Forgot Password?'),
+                  onPressed: () {},
+                  child: const Text('Forgot Password?'),
                 ),
               ],
             ),

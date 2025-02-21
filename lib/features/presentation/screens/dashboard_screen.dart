@@ -1,15 +1,16 @@
 import 'package:edubridge/features/presentation/notice_screen.dart';
-import 'package:edubridge/features/presentation/screens/event_screen.dart';
-import 'package:edubridge/features/presentation/screens/prizes_screen.dart';
-import 'package:edubridge/features/presentation/screens/result_screen.dart';
-import 'package:edubridge/features/presentation/screens/teacher_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/providers/navigation_provider.dart';
+import '../../../core/providers/language_provider.dart';
+import 'assignment_screen.dart';
 import 'query_screen.dart';
 import 'notification_screen.dart';
 import 'profile_screen.dart';
-import 'assignment_screen.dart';
+import 'package:edubridge/features/presentation/screens/event_screen.dart';
+import 'package:edubridge/features/presentation/screens/result_screen.dart';
+import 'package:edubridge/features/presentation/screens/prizes_screen.dart';
+import 'package:edubridge/features/presentation/screens/teacher_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -22,16 +23,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final navigationProvider = Provider.of<NavigationProvider>(context);
+    final languageProvider = Provider.of<LanguageProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.school, color: Colors.black),
+        leading: const Icon(Icons.school, color: Colors.black),
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Student Name', style: TextStyle(color: Colors.black)),
-            SizedBox(width: 5),
-            Icon(Icons.language, color: Colors.black),
+            Text(
+              languageProvider.texts['student_name'] ?? 'Student Name',
+              style: const TextStyle(color: Colors.black),
+            ),
+            DropdownButton<String>(
+              icon: const Icon(Icons.language, color: Colors.black),
+              underline: const SizedBox(),
+              value: languageProvider.currentLocale.languageCode,
+              items: const [
+                DropdownMenuItem(value: 'en', child: Text('English')),
+                DropdownMenuItem(value: 'hi', child: Text('हिन्दी')),
+              ],
+              onChanged: (String? value) {
+                if (value != null) {
+                  languageProvider.changeLanguage(value);
+                }
+              },
+            ),
           ],
         ),
         backgroundColor: Colors.white,
@@ -44,13 +61,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
+                  margin: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   height: 200,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black12,
                         blurRadius: 4,
@@ -64,14 +81,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         top: 0,
                         left: 0,
                         child: Text(
-                          'Attendance Viewport',
-                          style: TextStyle(
+                          languageProvider.texts['attendance_viewport'] ??
+                              'Attendance Viewport',
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      Positioned(
+                      const Positioned(
                         top: 0,
                         right: 0,
                         child: Icon(Icons.calendar_month, color: Colors.black),
@@ -86,15 +104,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               shape: BoxShape.rectangle,
                               color: Colors.grey[300],
                             ),
-                            child:
-                                Icon(Icons.person, color: Colors.black, size: 60),
+                            child: const Icon(Icons.person,
+                                color: Colors.black, size: 60),
                           ),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(height: 34),
-                              Container(
+                              const SizedBox(height: 34),
+                              const SizedBox(
                                 width: 180,
                                 child: TextField(
                                   decoration: InputDecoration(
@@ -103,10 +121,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 16),
-                              Container(
+                              const SizedBox(height: 16),
+                              SizedBox(
                                 width: 180,
-                                child: TextField(
+                                child: const TextField(
                                   decoration: InputDecoration(
                                     hintText: 'Field 2',
                                     border: OutlineInputBorder(),
@@ -121,65 +139,87 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
                 GridView.count(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   crossAxisCount: 2,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AssignmentScreen())),
-                      child:
-                          _buildDashboardBox(Icons.assignment, 'Assignments'),
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NoticeBoardScreen())),
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AssignmentScreen()),
+                      ),
                       child: _buildDashboardBox(
-                          Icons.notifications, 'Notice Board'),
+                        Icons.assignment,
+                        languageProvider.texts['assignments'] ?? 'Assignments',
+                      ),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EventsScreen())),
-                      child: _buildDashboardBox(Icons.event, 'Events'),
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NoticeBoardScreen()),
+                      ),
+                      child: _buildDashboardBox(
+                        Icons.notifications,
+                        languageProvider.texts['notice_board'] ??
+                            'Notice Board',
+                      ),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ResultScreen())),
-                      child: _buildDashboardBox(Icons.assessment, 'Results'),
+                        context,
+                        MaterialPageRoute(builder: (context) => EventsScreen()),
+                      ),
+                      child: _buildDashboardBox(
+                        Icons.event,
+                        languageProvider.texts['events'] ?? 'Events',
+                      ),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PrizesScreen())),
-                      child: _buildDashboardBox(Icons.emoji_events, 'Prizes'),
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ResultScreen()),
+                      ),
+                      child: _buildDashboardBox(
+                        Icons.assessment,
+                        languageProvider.texts['results'] ?? 'Results',
+                      ),
                     ),
                     GestureDetector(
                       onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TeachersScreen())),
-                      child: _buildDashboardBox(Icons.people, 'Teachers'),
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PrizesScreen()),
+                      ),
+                      child: _buildDashboardBox(
+                        Icons.emoji_events,
+                        languageProvider.texts['prizes'] ?? 'Prizes',
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TeachersScreen()),
+                      ),
+                      child: _buildDashboardBox(
+                        Icons.people,
+                        languageProvider.texts['teachers'] ?? 'Teachers',
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-          QueryScreen(),
-          NotificationScreen(),
-          ProfileScreen(),
+          const QueryScreen(),
+          const NotificationScreen(),
+          const ProfileScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -189,15 +229,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
         unselectedItemColor: Colors.black,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: Colors.black), label: 'Home'),
+            icon: const Icon(Icons.home, color: Colors.black),
+            label: languageProvider.texts['home'] ?? 'Home',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.question_answer, color: Colors.black),
-              label: 'Query'),
+            icon: const Icon(Icons.question_answer, color: Colors.black),
+            label: languageProvider.texts['query'] ?? 'Query',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.notifications, color: Colors.black),
-              label: 'Notifications'),
+            icon: const Icon(Icons.notifications, color: Colors.black),
+            label: languageProvider.texts['notifications'] ?? 'Notifications',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person, color: Colors.black), label: 'Profile'),
+            icon: const Icon(Icons.person, color: Colors.black),
+            label: languageProvider.texts['profile'] ?? 'Profile',
+          ),
         ],
       ),
     );
@@ -208,7 +254,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 4,
@@ -220,9 +266,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, size: 40, color: Colors.black),
-          SizedBox(height: 8),
-          Text(title,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
         ],
       ),
     );
