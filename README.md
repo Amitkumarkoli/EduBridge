@@ -1,4 +1,7 @@
 # 📚 EduBridge – Connecting Parents & Teachers 
+
+> ⚠️ **The backend is currently under development. Please stay tuned — I'll update the APK soon to integrate all backend features!**
+
 [![Download APK](https://img.shields.io/badge/Download-APK-blue)](https://Amitkumarkoli.github.io/EduBridge/EduBridge.apk)
 
 
@@ -26,6 +29,8 @@
 - **Authentication:** JWT  
 - **State Management:** Provider  
 - **Deployment:** Vercel
+
+> ⚠️ **The backend is currently under development. Please stay tuned — I'll update the APK soon to integrate all backend features!**
 
 ---
 
